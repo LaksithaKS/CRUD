@@ -1,9 +1,12 @@
 package com.servicesImpl;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.models.User;
@@ -31,5 +34,18 @@ public class UserServiceImpl implements UserService{
 		return userRepository.findById(id);
 	}
 	
+	@Override
+	public ResponseEntity<?> updateUser(User user,int id) {
+	    try {
+	        userRepository.save(user);
+	        return new ResponseEntity<>(HttpStatus.OK);
+	    } catch (NoSuchElementException e) {
+	        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	    }      
+	}
 	
+	@Override
+	public void deleteUser(int id){
+	    userRepository.deleteById(id);
+	}
 }
